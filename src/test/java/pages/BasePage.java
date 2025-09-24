@@ -1,8 +1,6 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -16,9 +14,13 @@ public class BasePage {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
+    protected void clickWithJS(By locator) {
+        WebElement element = wait.until(ExpectedConditions.elementToBeClickable(locator));
+        JavascriptExecutor js = (JavascriptExecutor) driver;
 
-    protected void click(By locator) {
-        wait.until(ExpectedConditions.elementToBeClickable(locator)).click();
+        js.executeScript("arguments[0].dispatchEvent(new MouseEvent('mousedown', {bubbles: true}));", element);
+        js.executeScript("arguments[0].dispatchEvent(new MouseEvent('mouseup', {bubbles: true}));", element);
+        js.executeScript("arguments[0].dispatchEvent(new MouseEvent('click', {bubbles: true}));", element);
     }
     protected boolean tieneClase(By locator, String clase) {
         WebElement element = driver.findElement(locator);
