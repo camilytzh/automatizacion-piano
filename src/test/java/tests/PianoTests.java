@@ -1,7 +1,9 @@
 package tests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.qameta.allure.Allure;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.io.File;
@@ -12,6 +14,7 @@ import static org.testng.Assert.*;
 /**
  * Pruebas relacionadas con el ingreso de una secuencia de notas en el piano.
  */
+@Listeners({io.qameta.allure.testng.AllureTestNg.class})
 public class PianoTests extends BaseTest{
     private Map<String, List<String>> escenariosNotas;
     /**
@@ -32,10 +35,11 @@ public class PianoTests extends BaseTest{
     public void escenario1(){
         List<String> notas = escenariosNotas.get("escenario1");
         for (String nota : notas) {
-            pianoPage.presionarTeclaDown(nota);
-            assertTrue(pianoPage.esPresionadaLaTecla(nota), "La tecla " + nota + " no fue presionada");
-
-            pianoPage.esperar(100);
+            Allure.step("Presionar nota " + nota, () -> {
+                        pianoPage.presionarTeclaDown(nota);
+                        assertTrue(pianoPage.esPresionadaLaTecla(nota), "La tecla " + nota + " no fue presionada");
+                    });
+            pianoPage.esperar(150);
 
             pianoPage.soltarTecla(nota);
             assertTrue(pianoPage.esLiberadaLaTecla(nota), "La tecla " + nota + " no fue liberada");
@@ -45,10 +49,11 @@ public class PianoTests extends BaseTest{
     public void escenario2(){
         List<String> notas = escenariosNotas.get("escenario2");
         for(String nota : notas){
-            pianoPage.presionarTeclaDown(nota);
-            assertTrue(pianoPage.esPresionadaLaTecla(nota), "La tecla " + nota + " no fue presionada");
-
-            pianoPage.esperar(100);
+            Allure.step("Presionar nota " + nota, () -> {
+                        pianoPage.presionarTeclaDown(nota);
+                        assertTrue(pianoPage.esPresionadaLaTecla(nota), "La tecla " + nota + " no fue presionada");
+                    });
+            pianoPage.esperar(150);
 
             pianoPage.soltarTecla(nota);
             assertTrue(pianoPage.esLiberadaLaTecla(nota), "La tecla " + nota + " no fue liberada");
@@ -58,10 +63,11 @@ public class PianoTests extends BaseTest{
     public void escenario3(){
         List<String> notas = escenariosNotas.get("escenario3");
         for(String nota : notas){
-            pianoPage.presionarTeclaDown(nota);
-            assertTrue(pianoPage.esPresionadaLaTecla(nota), "La tecla " + nota + " no fue presionada");
-
-            pianoPage.esperar(100);
+            Allure.step("Presionar nota " + nota, () -> {
+                        pianoPage.presionarTeclaDown(nota);
+                        assertTrue(pianoPage.esPresionadaLaTecla(nota), "La tecla " + nota + " no fue presionada");
+                    });
+            pianoPage.esperar(150);
 
             pianoPage.soltarTecla(nota);
             assertTrue(pianoPage.esLiberadaLaTecla(nota), "La tecla " + nota + " no fue liberada");
