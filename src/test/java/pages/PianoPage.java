@@ -6,9 +6,15 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.Map;
-
+/**
+ * Clase que representa la página del piano virtual.
+ * Permite interactuar con las teclas del piano y verificar su estado.
+ */
 public class PianoPage extends BasePage {
     protected JavascriptExecutor js;
+    /**
+     * Mapeo de notas con identificadores únicos para cada una.
+     */
     private final Map<String, String> mapaNotas = Map.of(
             "do" ,"1c",
             "re","1d",
@@ -31,17 +37,25 @@ public class PianoPage extends BasePage {
         By locator = By.cssSelector("span[data-note='" + tecla + "']");
         return wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
+    /**
+     * Verifica si la clase del elemento pasa a un estado activo que indica que está siendo presionada.
+     * @param nota La nota musical a verificar si se encuentra activa.
+     */
     public boolean esPresionadaLaTecla(String nota) {
         String tecla = obtenerTecla(nota);
         By teclaElem = By.cssSelector("span[data-note='" + tecla + "']");
         try {
             new WebDriverWait(driver, Duration.ofSeconds(2))
-                    .until(d -> tieneClase(teclaElem));
+                    .until(d -> tieneClaseActive(teclaElem));
             return true;
         } catch (Exception e) {
             return false;
         }
     }
+    /**
+     * Mantiene presionada una tecla en específico.
+     * @param nota La nota musical a presionar.
+     */
     public void presionarTeclaDown(String nota) {
         WebElement element = obtenerTeclaElemento(nota);
 
@@ -50,7 +64,10 @@ public class PianoPage extends BasePage {
                 element
         );
     }
-
+    /**
+     * Libera la tecla que estaba siendo presionada
+     * @param nota La nota musical a verificar.
+     * */
     public void soltarTecla(String nota) {
         WebElement element = obtenerTeclaElemento(nota);
 
@@ -60,7 +77,7 @@ public class PianoPage extends BasePage {
         );
 
         new WebDriverWait(driver, Duration.ofSeconds(1))
-                .until(d -> !tieneClase(By.cssSelector("span[data-note='" + obtenerTecla(nota) + "']")));
+                .until(d -> !tieneClaseActive(By.cssSelector("span[data-note='" + obtenerTecla(nota) + "']")));
     }
     public void esperar(int ms){
         try {
@@ -69,13 +86,17 @@ public class PianoPage extends BasePage {
             Thread.currentThread().interrupt();
         }
     }
+    /**
+     * Verifica que la tecla no siga estando presionada obteniendo el nombre de su clase.
+     * @param nota La nota musical a verificar.
+     * */
     public boolean esLiberadaLaTecla(String nota) {
         String tecla = obtenerTecla(nota);
         By teclaElem = By.cssSelector("span[data-note='" + tecla + "']");
 
         try {
             return new WebDriverWait(driver, Duration.ofSeconds(2))
-                    .until(driver -> !tieneClase(teclaElem));
+                    .until(driver -> !tieneClaseActive(teclaElem));
         } catch (Exception e) {
             return false;
         }
